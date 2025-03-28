@@ -3,26 +3,28 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC  # Import Support Vector Classifier
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report, roc_auc_score
 
 # Step 1: Load the Kaggle dataset
 # Replace 'your_dataset.csv' with the path to your Kaggle dataset
 data = pd.read_csv('cbb.csv')
 
-
-# Step 3: Drop unwanted columns (TEAM, CONF, G, POSTSEASON)
+# Step 2: Drop unwanted columns (TEAM, CONF, G, POSTSEASON)
 data = data.drop(['TEAM', 'CONF', 'G', 'POSTSEASON', 'SEED'], axis=1)
+
 # Step 3: Select features (X) and target variable (y)
-# Assuming 'target' is the column you want to predict, and the rest are features
+# Assuming 'F4' is the column you want to predict, and the rest are features
 X = data.drop('F4', axis=1)  # All columns except 'F4' will be used as features
-y = data['F4']
+y = data['F4']  # 'F4' is the target variable
 
 # Step 4: Split the dataset into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Step 5: Initialize the Logistic Regression model
-model = LogisticRegression(max_iter=2000)
+# Step 5: Initialize the SVM model (with a radial basis function kernel)
+model = SVC(kernel='linear', probability=True, class_weight='balanced', random_state=42)
+
+
 
 # Step 6: Train the model on the training data
 model.fit(X_train, y_train)
